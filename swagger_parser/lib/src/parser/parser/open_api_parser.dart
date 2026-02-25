@@ -69,6 +69,7 @@ class OpenApiParser {
   static const _inConst = 'in';
   static const _infoConst = 'info';
   static const _itemsConst = 'items';
+  static const _prefixItemsConst = 'prefixItems';
   static const _mappingConst = 'mapping';
   static const _multipartFormDataConst = 'multipart/form-data';
   static const _nameConst = 'name';
@@ -1299,17 +1300,34 @@ class OpenApiParser {
   }) {
     // Array
     if (map.containsKey(_typeConst) && map[_typeConst] == _arrayConst) {
-      final arrayItemsSchema =
-          (map[_itemsConst] as Map<String, dynamic>?) ?? {};
+      Map<String, dynamic> arrayItemsSchema;
+      final rawItems = map[_itemsConst];
+
+      if (rawItems is Map<String, dynamic>) {
+        // Standard case: items is a schema object
+        arrayItemsSchema = rawItems;
+      } else if (rawItems == false || rawItems == null) {
+        // OpenAPI 3.1 / JSON Schema 2020-12: items: false (or absent)
+        // Check for prefixItems (tuple schema)
+        final prefixItems = map[_prefixItemsConst];
+        if (prefixItems is List && prefixItems.isNotEmpty) {
+          arrayItemsSchema =
+              (prefixItems.first as Map<String, dynamic>?) ?? {};
+        } else {
+          arrayItemsSchema = {};
+        }
+      } else {
+        arrayItemsSchema = {};
+      }
+
       // Determine item details by recursively calling _findType for the item schema.
       // `root` is false for items, meaning item's nullability is driven by its own schema's `nullable` field.
       final (type: itemDetails, import: itemImport) = _findType(
         arrayItemsSchema,
-        name: name, // Or a modified name specific to items if needed
+        name: name,
         additionalName: additionalName,
         root: false,
-        isRequired:
-            true, // This doesn't affect itemDetails.nullable due to root:false
+        isRequired: true,
       );
 
       final (newName, description) = protectName(
