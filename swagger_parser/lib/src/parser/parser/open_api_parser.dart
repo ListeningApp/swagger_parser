@@ -262,10 +262,18 @@ class OpenApiParser {
           }
           final isRequired =
               parameter[_requiredConst]?.toString().toBool() ?? false;
+          final paramSchemaMap = parameter[_schemaConst] != null
+              ? parameter[_schemaConst] as Map<String, dynamic>
+              : parameter;
+
+          // Track schema references for filtering (same as request bodies
+          // and responses). Without this, schemas referenced only from
+          // query/path/header parameters are filtered out as "unused" but
+          // still imported in the generated client, causing missing files.
+          _extractSchemaRefs(paramSchemaMap, null);
+
           final typeWithImport = _findType(
-            parameter[_schemaConst] != null
-                ? parameter[_schemaConst] as Map<String, dynamic>
-                : parameter,
+            paramSchemaMap,
             name: parameter[_nameConst].toString(),
             isRequired: isRequired,
           );
