@@ -481,7 +481,8 @@ Set<String> _filterUnionImports(UniversalComponentClass dataClass) {
 
   for (final import in dataClass.imports) {
     // Exclude union files to avoid circular dependencies
-    final shouldSkip = import.toLowerCase().contains('union');
+    final shouldSkip =
+        import.toLowerCase().contains('union') || _isDartCoreType(import);
 
     if (!shouldSkip) {
       filteredImports.add(import);
@@ -528,7 +529,7 @@ Set<String> _importsForUndiscriminatedUnion(UniversalComponentClass dataClass) {
   return imports.map(_applySealedNamingToImport).toSet();
 }
 
-bool _isDartCoreType(String type) => switch (type) {
+bool _isDartCoreType(String type) => switch (type.toPascal) {
       'bool' ||
       'double' ||
       'dynamic' ||

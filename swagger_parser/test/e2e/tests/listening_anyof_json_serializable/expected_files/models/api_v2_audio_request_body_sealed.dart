@@ -5,7 +5,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'integration_source.dart';
-import 'string.dart';
 import 'api_v2_audio_request_body_union_variant1_document_type.dart';
 import 'api_v2_audio_request_body_union_variant2_document_type.dart';
 

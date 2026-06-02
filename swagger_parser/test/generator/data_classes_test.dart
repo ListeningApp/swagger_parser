@@ -50,6 +50,7 @@ void main() {
         contains(
             "import 'api_v2_audio_request_body_union_variant2_document_type.dart';"),
       );
+      expect(audioRequestBody, isNot(contains("import 'string.dart';")));
 
       final zoteroStatus = generatedFiles
           .singleWhere((file) =>
@@ -66,6 +67,7 @@ void main() {
         contains(
             "import 'get_api_v2_integrations_zotero_status_response_union_variant2_connected.dart';"),
       );
+      expect(zoteroStatus, isNot(contains("import 'string.dart';")));
     });
   });
 
