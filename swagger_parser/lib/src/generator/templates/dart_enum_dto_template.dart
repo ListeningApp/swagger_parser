@@ -23,7 +23,8 @@ String dartEnumDtoTemplate(
     );
   } else {
     final className = enumClass.name.toPascal;
-    final jsonParam = unknownEnumValue || enumsToJson;
+    final jsonParam =
+        unknownEnumValue || enumsToJson || enumClass.type == 'boolean';
     final asyncImport = useFlutterCompute ? "import 'dart:async';\n\n" : '';
 
     final values =
@@ -36,6 +37,8 @@ String dartEnumDtoTemplate(
       if (unknownEnumValue) _fromJson(className, enumClass),
       if (jsonParam) _jsonField(enumClass),
       if (enumsToJson) _toJson(enumClass, className),
+      if (enumClass.type == 'boolean')
+        _booleanJsonHelpers(className, unknownEnumValue),
       if (jsonParam) _toString(),
       if (unknownEnumValue) _valuesDefined(className),
     ];
@@ -174,9 +177,9 @@ String _enumValue(
   }
 
   final name = item.name.isEmpty ? 'empty' : item.name;
+  final jsonValueAnnotation = type == 'boolean' ? '' : '  @JsonValue($value)\n';
   return '''
-${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}  @JsonValue($value)
-  ${name.toCamel}${jsonParam ? '($value)' : ''}''';
+${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}$jsonValueAnnotation  ${name.toCamel}${jsonParam ? '($value)' : ''}''';
 }
 
 String _enumValueDartMappable(
@@ -204,6 +207,15 @@ String _toJson(UniversalEnumClass enumClass, String className) {
     return value as $dartType;
   }''';
 }
+
+String _booleanJsonHelpers(String className, bool unknownEnumValue) => '''
+
+  static $className fromJsonValue(bool json) => values.firstWhere(
+        (e) => e.json == json,
+        ${unknownEnumValue ? 'orElse: () => \$unknown,' : ''}
+      );
+
+  static bool? toJsonValue($className? object) => object?.json;''';
 
 String _toString() =>
     '\n\n  @override\n  String toString() => json?.toString() ?? super.toString();';

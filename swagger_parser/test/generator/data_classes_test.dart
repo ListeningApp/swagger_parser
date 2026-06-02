@@ -74,13 +74,26 @@ void main() {
           .content;
       expect(
           audioClient, contains('required ApiV2AudioRequestBodySealed body'));
+      expect(
+        zoteroStatus,
+        contains(
+            'fromJson: GetApiV2IntegrationsZoteroStatusResponseUnionVariant1Connected'),
+      );
+      expect(
+        zoteroStatus,
+        contains(
+            'toJson: GetApiV2IntegrationsZoteroStatusResponseUnionVariant1Connected'),
+      );
 
       final disconnectedStatus = generatedFiles
           .singleWhere((file) =>
               file.name ==
               'models/get_api_v2_integrations_zotero_status_response_union_variant1_connected.dart')
           .content;
-      expect(disconnectedStatus, contains('@JsonValue(false)'));
+      expect(disconnectedStatus, contains('valueFalse(false)'));
+      expect(disconnectedStatus, contains('fromJsonValue(bool json)'));
+      expect(disconnectedStatus, contains('toJsonValue('));
+      expect(disconnectedStatus, isNot(contains('@JsonValue(false)')));
       expect(disconnectedStatus, isNot(contains("@JsonValue('false')")));
     });
   });

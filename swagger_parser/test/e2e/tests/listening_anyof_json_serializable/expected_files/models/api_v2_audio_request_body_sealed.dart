@@ -37,7 +37,9 @@ extension ApiV2AudioRequestBodySealedDeserializer
 
 @JsonSerializable()
 class ApiV2AudioRequestBodySealedVariant1 extends ApiV2AudioRequestBodySealed {
+  @JsonKey(name: 'document_url')
   final String documentUrl;
+  @JsonKey(name: 'document_type')
   final ApiV2AudioRequestBodyUnionVariant1DocumentType? documentType;
   final String? title;
 
@@ -58,7 +60,9 @@ class ApiV2AudioRequestBodySealedVariant1 extends ApiV2AudioRequestBodySealed {
 
 @JsonSerializable()
 class ApiV2AudioRequestBodySealedVariant2 extends ApiV2AudioRequestBodySealed {
+  @JsonKey(name: 'integration_source')
   final IntegrationSource integrationSource;
+  @JsonKey(name: 'document_type')
   final ApiV2AudioRequestBodyUnionVariant2DocumentType? documentType;
   final String? title;
 

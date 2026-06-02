@@ -42,6 +42,11 @@ extension GetApiV2IntegrationsZoteroStatusResponseSealedDeserializer
 @JsonSerializable()
 class GetApiV2IntegrationsZoteroStatusResponseSealedVariant1
     extends GetApiV2IntegrationsZoteroStatusResponseSealed {
+  @JsonKey(
+      fromJson: GetApiV2IntegrationsZoteroStatusResponseUnionVariant1Connected
+          .fromJsonValue,
+      toJson: GetApiV2IntegrationsZoteroStatusResponseUnionVariant1Connected
+          .toJsonValue)
   final GetApiV2IntegrationsZoteroStatusResponseUnionVariant1Connected
       connected;
 
@@ -61,10 +66,18 @@ class GetApiV2IntegrationsZoteroStatusResponseSealedVariant1
 @JsonSerializable()
 class GetApiV2IntegrationsZoteroStatusResponseSealedVariant2
     extends GetApiV2IntegrationsZoteroStatusResponseSealed {
+  @JsonKey(
+      fromJson: GetApiV2IntegrationsZoteroStatusResponseUnionVariant2Connected
+          .fromJsonValue,
+      toJson: GetApiV2IntegrationsZoteroStatusResponseUnionVariant2Connected
+          .toJsonValue)
   final GetApiV2IntegrationsZoteroStatusResponseUnionVariant2Connected
       connected;
+  @JsonKey(name: 'display_name')
   final String? displayName;
+  @JsonKey(name: 'provider_user_id')
   final String providerUserId;
+  @JsonKey(name: 'connected_at')
   final String connectedAt;
 
   const GetApiV2IntegrationsZoteroStatusResponseSealedVariant2({

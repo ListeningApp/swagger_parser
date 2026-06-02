@@ -305,7 +305,7 @@ String _generateDiscriminatedWrapperClasses(
     // Generate direct properties
     final directProperties = properties
         .map((prop) =>
-            '  @override\n  final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};')
+            '${_jsonKey(prop, includeIfNull)}  @override\n  final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};')
         .join('\n');
 
     // Generate constructor parameters
@@ -351,7 +351,7 @@ String _generateUndiscriminatedWrapperClasses(
     // Generate direct properties
     final directProperties = properties
         .map((prop) =>
-            '${isInline ? '' : '  @override\n'}  final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};')
+            '${_jsonKey(prop, includeIfNull)}${isInline ? '' : '  @override\n'}  final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};')
         .join('\n');
 
     // Generate constructor parameters
@@ -452,6 +452,12 @@ String _jsonKey(UniversalType t, bool includeIfNull) {
     jsonKeyParams['name'] = "'${protectJsonKey(t.jsonKey)}'";
   }
 
+  if (_isBooleanEnumField(t)) {
+    final type = _renameUnionTypes(t.type.toPascal);
+    jsonKeyParams['fromJson'] = '$type.fromJsonValue';
+    jsonKeyParams['toJson'] = '$type.toJsonValue';
+  }
+
   if (jsonKeyParams.isNotEmpty) {
     buffer.write(
         "  @JsonKey(${jsonKeyParams.entries.map((e) => '${e.key}: ${e.value}').join(',')})\n");
@@ -459,6 +465,9 @@ String _jsonKey(UniversalType t, bool includeIfNull) {
 
   return buffer.toString();
 }
+
+bool _isBooleanEnumField(UniversalType t) =>
+    t.enumType == 'boolean' && t.wrappingCollections.isEmpty;
 
 /// return required if isRequired
 String _required(UniversalType t) =>

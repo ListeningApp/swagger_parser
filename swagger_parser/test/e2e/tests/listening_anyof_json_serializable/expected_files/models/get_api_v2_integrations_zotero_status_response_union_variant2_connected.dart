@@ -7,7 +7,6 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonEnum()
 enum GetApiV2IntegrationsZoteroStatusResponseUnionVariant2Connected {
   /// The name has been replaced because it contains a keyword. Original name: `true`.
-  @JsonValue(true)
   valueTrue(true),
 
   /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
@@ -24,6 +23,16 @@ enum GetApiV2IntegrationsZoteroStatusResponseUnionVariant2Connected {
       );
 
   final bool? json;
+  static GetApiV2IntegrationsZoteroStatusResponseUnionVariant2Connected
+      fromJsonValue(bool json) => values.firstWhere(
+            (e) => e.json == json,
+            orElse: () => $unknown,
+          );
+
+  static bool? toJsonValue(
+          GetApiV2IntegrationsZoteroStatusResponseUnionVariant2Connected?
+              object) =>
+      object?.json;
 
   @override
   String toString() => json?.toString() ?? super.toString();
