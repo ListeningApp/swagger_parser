@@ -1,0 +1,120 @@
+openapi: 3.1.0
+info:
+  title: Listening AnyOf API
+  version: 1.0.0
+paths:
+  /api/v2/audio:
+    post:
+      tags:
+        - Audio
+      operationId: Audio.CreateAudio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - type: object
+                  required:
+                    - document_url
+                  properties:
+                    document_url:
+                      type: string
+                    title:
+                      anyOf:
+                        - type: string
+                        - type: "null"
+                  additionalProperties: false
+                - type: object
+                  required:
+                    - integration_source
+                  properties:
+                    integration_source:
+                      type: object
+                      required:
+                        - provider
+                        - file_id
+                      properties:
+                        provider:
+                          type: string
+                          enum:
+                            - zotero
+                        file_id:
+                          type: string
+                      additionalProperties: false
+                    title:
+                      anyOf:
+                        - type: string
+                        - type: "null"
+                  additionalProperties: false
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: string
+                additionalProperties: false
+  /api/v2/integrations/zotero/status:
+    get:
+      tags:
+        - Zotero
+      operationId: Zotero.GetZoteroStatus
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    required:
+                      - connected
+                    properties:
+                      connected:
+                        type: boolean
+                        enum:
+                          - false
+                    additionalProperties: false
+                  - type: object
+                    required:
+                      - connected
+                      - provider_user_id
+                      - connected_at
+                    properties:
+                      connected:
+                        type: boolean
+                        enum:
+                          - true
+                      display_name:
+                        anyOf:
+                          - type: string
+                          - type: "null"
+                      provider_user_id:
+                        type: string
+                      connected_at:
+                        type: string
+                    additionalProperties: false
+  /api/public/tools:
+    get:
+      tags:
+        - PublicTools
+      operationId: PublicTools.List
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - result
+                properties:
+                  result:
+                    type: string
+                additionalProperties: false

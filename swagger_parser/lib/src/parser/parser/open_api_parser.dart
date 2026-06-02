@@ -1319,8 +1319,7 @@ class OpenApiParser {
         // Check for prefixItems (tuple schema)
         final prefixItems = map[_prefixItemsConst];
         if (prefixItems is List && prefixItems.isNotEmpty) {
-          arrayItemsSchema =
-              (prefixItems.first as Map<String, dynamic>?) ?? {};
+          arrayItemsSchema = (prefixItems.first as Map<String, dynamic>?) ?? {};
         } else {
           arrayItemsSchema = {};
         }
@@ -1910,6 +1909,23 @@ class OpenApiParser {
                     undiscriminatedUnionVariants: variantRefToProps,
                   ),
                 );
+                // Register inline unions just like other synthesized inline
+                // schemas. Without this, tag/path filtering can keep clients
+                // that import the union while dropping the union DTO itself.
+                if (_contextStack.current case final context?) {
+                  _anchorRegistry.registerInlineSchema(unionName, context);
+                }
+                if (imports.isNotEmpty) {
+                  _schemaDependencies[unionName] = imports.toSet();
+                  if (_contextStack.current case final context?) {
+                    for (final imp in imports) {
+                      _anchorRegistry.registerInlineSchemaReference(
+                        imp,
+                        context,
+                      );
+                    }
+                  }
+                }
 
                 ofType = UniversalType(
                   type: unionName,

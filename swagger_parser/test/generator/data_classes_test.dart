@@ -1,9 +1,43 @@
 // ignore_for_file: avoid_redundant_argument_values
 
+import 'dart:io';
+
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:test/test.dart';
 
 void main() {
+  group('Listening anyOf json_serializable generation', () {
+    test('emits sealed DTO files referenced by generated clients', () async {
+      final fileContent = await File(
+        'test/e2e/tests/listening_anyof_json_serializable/openapi.yaml',
+      ).readAsString();
+      const processor = GenProcessor(
+        SWPConfig(
+          outputDirectory: '',
+          schemaPath: '',
+          jsonSerializer: JsonSerializer.jsonSerializable,
+          putClientsInFolder: true,
+          excludeTags: ['PublicTools'],
+        ),
+      );
+
+      final generatedFiles = await processor.generateContent((
+        fileContent: fileContent,
+        isJson: false,
+      ));
+      final fileNames = generatedFiles.map((file) => file.name).toSet();
+
+      expect(
+          fileNames, contains('models/api_v2_audio_request_body_sealed.dart'));
+      expect(
+        fileNames,
+        contains(
+            'models/get_api_v2_integrations_zotero_status_response_sealed.dart'),
+      );
+      expect(fileNames, contains('models/integration_source.dart'));
+    });
+  });
+
   group('Empty data class', () {
     test('dart + json_serializable', () async {
       const dataClass = UniversalComponentClass(

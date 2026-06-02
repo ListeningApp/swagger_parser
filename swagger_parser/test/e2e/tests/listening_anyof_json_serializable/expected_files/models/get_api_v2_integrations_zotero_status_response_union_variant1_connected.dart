@@ -1,0 +1,34 @@
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, unused_import, invalid_annotation_target, unnecessary_import
+
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum()
+enum GetApiV2IntegrationsZoteroStatusResponseUnionVariant1Connected {
+  /// The name has been replaced because it contains a keyword. Original name: `false`.
+  @JsonValue('false')
+  valueFalse('false'),
+
+  /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
+  $unknown(null);
+
+  const GetApiV2IntegrationsZoteroStatusResponseUnionVariant1Connected(
+      this.json);
+
+  factory GetApiV2IntegrationsZoteroStatusResponseUnionVariant1Connected.fromJson(
+          bool json) =>
+      values.firstWhere(
+        (e) => e.json == json,
+        orElse: () => $unknown,
+      );
+
+  final bool? json;
+
+  @override
+  String toString() => json?.toString() ?? super.toString();
+
+  /// Returns all defined enum values excluding the $unknown value.
+  static List<GetApiV2IntegrationsZoteroStatusResponseUnionVariant1Connected>
+      get $valuesDefined => values.where((value) => value != $unknown).toList();
+}

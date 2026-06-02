@@ -255,6 +255,20 @@ void main() {
         schemaFileName: 'openapi.yaml',
       );
     });
+
+    test('listening_anyof_json_serializable', () async {
+      await e2eTest(
+        'listening_anyof_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.jsonSerializable,
+          putClientsInFolder: true,
+          excludeTags: ['PublicTools'],
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
   });
 
   group('basic', () {
