@@ -5,6 +5,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'integration_source.dart';
+import 'string.dart';
+import 'api_v2_audio_request_body_union_variant1_document_type.dart';
+import 'api_v2_audio_request_body_union_variant2_document_type.dart';
 
 part 'api_v2_audio_request_body_sealed.g.dart';
 
@@ -38,10 +41,13 @@ class ApiV2AudioRequestBodySealedVariant1 extends ApiV2AudioRequestBodySealed {
   @override
   final String documentUrl;
   @override
+  final ApiV2AudioRequestBodyUnionVariant1DocumentType? documentType;
+  @override
   final String? title;
 
   const ApiV2AudioRequestBodySealedVariant1({
     required this.documentUrl,
+    required this.documentType,
     required this.title,
   });
 
@@ -59,10 +65,13 @@ class ApiV2AudioRequestBodySealedVariant2 extends ApiV2AudioRequestBodySealed {
   @override
   final IntegrationSource integrationSource;
   @override
+  final ApiV2AudioRequestBodyUnionVariant2DocumentType? documentType;
+  @override
   final String? title;
 
   const ApiV2AudioRequestBodySealedVariant2({
     required this.integrationSource,
+    required this.documentType,
     required this.title,
   });
 

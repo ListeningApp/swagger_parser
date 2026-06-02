@@ -20,6 +20,11 @@ paths:
                   properties:
                     document_url:
                       type: string
+                    document_type:
+                      type: string
+                      enum:
+                        - pdf
+                        - html
                     title:
                       anyOf:
                         - type: string
@@ -42,6 +47,11 @@ paths:
                         file_id:
                           type: string
                       additionalProperties: false
+                    document_type:
+                      type: string
+                      enum:
+                        - pdf
+                        - html
                     title:
                       anyOf:
                         - type: string

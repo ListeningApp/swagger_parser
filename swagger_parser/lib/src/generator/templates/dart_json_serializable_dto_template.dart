@@ -507,7 +507,8 @@ Set<String> _importsForUndiscriminatedUnion(UniversalComponentClass dataClass) {
   final imports = <String>{}..addAll(_filterUnionImports(dataClass));
   final variants = dataClass.undiscriminatedUnionVariants;
   if (variants != null && variants.isNotEmpty) {
-    for (final variantName in variants.keys) {
+    for (final entry in variants.entries) {
+      final variantName = entry.key;
       // Only add imports for referenced components; skip inline variants (variantX)
       final lower = variantName.toLowerCase();
       final isUnion = lower.contains('union');
@@ -516,10 +517,31 @@ Set<String> _importsForUndiscriminatedUnion(UniversalComponentClass dataClass) {
       if (!isUnion && !isInline && !isSelf) {
         imports.add(variantName);
       }
+      for (final property in entry.value) {
+        final type = _renameUnionTypes(property.type);
+        if (!_isDartCoreType(type) && type != dataClass.name) {
+          imports.add(type);
+        }
+      }
     }
   }
   return imports.map(_applySealedNamingToImport).toSet();
 }
+
+bool _isDartCoreType(String type) => switch (type) {
+      'bool' ||
+      'double' ||
+      'dynamic' ||
+      'File' ||
+      'int' ||
+      'Map' ||
+      'MultipartFile' ||
+      'num' ||
+      'Object' ||
+      'String' =>
+        true,
+      _ => false,
+    };
 
 /// Filters out union imports for regular (non-union) classes
 Set<String> _filterUnionImportsForNonUnion(UniversalComponentClass dataClass) {

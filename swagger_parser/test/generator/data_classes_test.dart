@@ -35,6 +35,37 @@ void main() {
             'models/get_api_v2_integrations_zotero_status_response_sealed.dart'),
       );
       expect(fileNames, contains('models/integration_source.dart'));
+
+      final audioRequestBody = generatedFiles
+          .singleWhere((file) =>
+              file.name == 'models/api_v2_audio_request_body_sealed.dart')
+          .content;
+      expect(
+        audioRequestBody,
+        contains(
+            "import 'api_v2_audio_request_body_union_variant1_document_type.dart';"),
+      );
+      expect(
+        audioRequestBody,
+        contains(
+            "import 'api_v2_audio_request_body_union_variant2_document_type.dart';"),
+      );
+
+      final zoteroStatus = generatedFiles
+          .singleWhere((file) =>
+              file.name ==
+              'models/get_api_v2_integrations_zotero_status_response_sealed.dart')
+          .content;
+      expect(
+        zoteroStatus,
+        contains(
+            "import 'get_api_v2_integrations_zotero_status_response_union_variant1_connected.dart';"),
+      );
+      expect(
+        zoteroStatus,
+        contains(
+            "import 'get_api_v2_integrations_zotero_status_response_union_variant2_connected.dart';"),
+      );
     });
   });
 

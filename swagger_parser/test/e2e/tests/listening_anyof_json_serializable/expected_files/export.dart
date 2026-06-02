@@ -10,7 +10,9 @@ export 'models/post_api_v2_audio_response.dart';
 export 'models/integration_source.dart';
 export 'models/api_v2_audio_request_body_sealed.dart';
 export 'models/get_api_v2_integrations_zotero_status_response_sealed.dart';
+export 'models/api_v2_audio_request_body_union_variant1_document_type.dart';
 export 'models/provider.dart';
+export 'models/api_v2_audio_request_body_union_variant2_document_type.dart';
 export 'models/get_api_v2_integrations_zotero_status_response_union_variant1_connected.dart';
 export 'models/get_api_v2_integrations_zotero_status_response_union_variant2_connected.dart';
 // Root client

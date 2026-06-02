@@ -4,6 +4,10 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
+import 'get_api_v2_integrations_zotero_status_response_union_variant1_connected.dart';
+import 'get_api_v2_integrations_zotero_status_response_union_variant2_connected.dart';
+import 'string.dart';
+
 part 'get_api_v2_integrations_zotero_status_response_sealed.g.dart';
 
 @JsonSerializable(createFactory: false)
