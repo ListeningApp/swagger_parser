@@ -16,6 +16,6 @@ abstract class AudioClient {
 
   @POST('/api/v2/audio')
   Future<PostApiV2AudioResponse> audioCreateAudio({
-    @Body() required ApiV2AudioRequestBodyUnion body,
+    @Body() required ApiV2AudioRequestBodySealed body,
   });
 }

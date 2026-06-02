@@ -152,6 +152,8 @@ String _enumValue(
   final String? value;
   if (type == 'string') {
     value = "'$protectedJsonKey'";
+  } else if (type == 'boolean') {
+    value = protectedJsonKey;
   } else {
     if (protectedJsonKey?.isEmpty ?? true) {
       value = "''";

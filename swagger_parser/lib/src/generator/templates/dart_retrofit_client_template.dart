@@ -185,7 +185,9 @@ String _toClientRequest(
     request.parameters.sorted((a, b) => a.type.compareTo(b.type)),
   );
   for (final parameter in sortedByRequired) {
-    sb.write('${_toParameter(parameter, useMultipartFile)}\n');
+    sb.write(
+      '${_toParameter(parameter, useMultipartFile, applySealedNaming: applySealedNaming)}\n',
+    );
   }
   if (addExtrasParameter) {
     sb.write(_addExtraParameter(defaultExtras));
@@ -262,11 +264,18 @@ String _quoteJson(String value) =>
 String _addDioOptionsParameter() =>
     '    @DioOptions() RequestOptions? options,\n';
 
-String _toParameter(UniversalRequestType parameter, bool useMultipartFile) {
+String _toParameter(
+  UniversalRequestType parameter,
+  bool useMultipartFile, {
+  bool applySealedNaming = false,
+}) {
   var parameterType = parameter.type.toSuitableType(
     ProgrammingLanguage.dart,
     useMultipartFile: useMultipartFile,
   );
+  if (applySealedNaming) {
+    parameterType = _renameUnionTypes(parameterType);
+  }
   // https://github.com/trevorwang/retrofit.dart/issues/631
   // https://github.com/Carapacik/swagger_parser/issues/110
   if (parameter.parameterType.isBody &&

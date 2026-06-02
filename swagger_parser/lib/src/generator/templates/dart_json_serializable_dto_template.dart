@@ -346,11 +346,12 @@ String _generateUndiscriminatedWrapperClasses(
     final variantName = entry.key;
     final properties = entry.value;
     final wrapperClassName = '$className${variantName.toPascal}';
+    final isInline = variantName.toLowerCase().startsWith('variant');
 
     // Generate direct properties
     final directProperties = properties
         .map((prop) =>
-            '  @override\n  final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};')
+            '${isInline ? '' : '  @override\n'}  final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};')
         .join('\n');
 
     // Generate constructor parameters
@@ -358,7 +359,6 @@ String _generateUndiscriminatedWrapperClasses(
         properties.map((prop) => '    required this.${prop.name},').join('\n');
 
     // Inline synthesized variants (variantX) should not implement any interface
-    final isInline = variantName.toLowerCase().startsWith('variant');
     final implementsClause = isInline ? '' : ' implements $variantName';
 
     return '''

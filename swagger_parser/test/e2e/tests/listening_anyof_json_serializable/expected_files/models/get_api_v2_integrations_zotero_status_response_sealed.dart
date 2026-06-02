@@ -42,7 +42,6 @@ extension GetApiV2IntegrationsZoteroStatusResponseSealedDeserializer
 @JsonSerializable()
 class GetApiV2IntegrationsZoteroStatusResponseSealedVariant1
     extends GetApiV2IntegrationsZoteroStatusResponseSealed {
-  @override
   final GetApiV2IntegrationsZoteroStatusResponseUnionVariant1Connected
       connected;
 
@@ -62,14 +61,10 @@ class GetApiV2IntegrationsZoteroStatusResponseSealedVariant1
 @JsonSerializable()
 class GetApiV2IntegrationsZoteroStatusResponseSealedVariant2
     extends GetApiV2IntegrationsZoteroStatusResponseSealed {
-  @override
   final GetApiV2IntegrationsZoteroStatusResponseUnionVariant2Connected
       connected;
-  @override
   final String? displayName;
-  @override
   final String providerUserId;
-  @override
   final String connectedAt;
 
   const GetApiV2IntegrationsZoteroStatusResponseSealedVariant2({

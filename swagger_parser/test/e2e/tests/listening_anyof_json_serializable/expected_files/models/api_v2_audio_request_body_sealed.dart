@@ -37,11 +37,8 @@ extension ApiV2AudioRequestBodySealedDeserializer
 
 @JsonSerializable()
 class ApiV2AudioRequestBodySealedVariant1 extends ApiV2AudioRequestBodySealed {
-  @override
   final String documentUrl;
-  @override
   final ApiV2AudioRequestBodyUnionVariant1DocumentType? documentType;
-  @override
   final String? title;
 
   const ApiV2AudioRequestBodySealedVariant1({
@@ -61,11 +58,8 @@ class ApiV2AudioRequestBodySealedVariant1 extends ApiV2AudioRequestBodySealed {
 
 @JsonSerializable()
 class ApiV2AudioRequestBodySealedVariant2 extends ApiV2AudioRequestBodySealed {
-  @override
   final IntegrationSource integrationSource;
-  @override
   final ApiV2AudioRequestBodyUnionVariant2DocumentType? documentType;
-  @override
   final String? title;
 
   const ApiV2AudioRequestBodySealedVariant2({

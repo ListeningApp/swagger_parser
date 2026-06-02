@@ -68,6 +68,20 @@ void main() {
             "import 'get_api_v2_integrations_zotero_status_response_union_variant2_connected.dart';"),
       );
       expect(zoteroStatus, isNot(contains("import 'string.dart';")));
+
+      final audioClient = generatedFiles
+          .singleWhere((file) => file.name == 'clients/audio_client.dart')
+          .content;
+      expect(
+          audioClient, contains('required ApiV2AudioRequestBodySealed body'));
+
+      final disconnectedStatus = generatedFiles
+          .singleWhere((file) =>
+              file.name ==
+              'models/get_api_v2_integrations_zotero_status_response_union_variant1_connected.dart')
+          .content;
+      expect(disconnectedStatus, contains('@JsonValue(false)'));
+      expect(disconnectedStatus, isNot(contains("@JsonValue('false')")));
     });
   });
 

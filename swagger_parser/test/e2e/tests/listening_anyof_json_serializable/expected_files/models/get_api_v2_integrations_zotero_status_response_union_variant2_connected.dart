@@ -7,8 +7,8 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonEnum()
 enum GetApiV2IntegrationsZoteroStatusResponseUnionVariant2Connected {
   /// The name has been replaced because it contains a keyword. Original name: `true`.
-  @JsonValue('true')
-  valueTrue('true'),
+  @JsonValue(true)
+  valueTrue(true),
 
   /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
   $unknown(null);
