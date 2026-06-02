@@ -95,6 +95,11 @@ void main() {
       expect(disconnectedStatus, contains('toJsonValue('));
       expect(disconnectedStatus, isNot(contains('@JsonValue(false)')));
       expect(disconnectedStatus, isNot(contains("@JsonValue('false')")));
+      final fromJsonValue = disconnectedStatus.substring(
+        disconnectedStatus.indexOf('fromJsonValue(bool json)'),
+        disconnectedStatus.indexOf('static bool? toJsonValue('),
+      );
+      expect(fromJsonValue, isNot(contains('orElse')));
     });
   });
 

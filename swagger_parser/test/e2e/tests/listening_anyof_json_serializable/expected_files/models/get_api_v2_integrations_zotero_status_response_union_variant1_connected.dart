@@ -26,7 +26,6 @@ enum GetApiV2IntegrationsZoteroStatusResponseUnionVariant1Connected {
   static GetApiV2IntegrationsZoteroStatusResponseUnionVariant1Connected
       fromJsonValue(bool json) => values.firstWhere(
             (e) => e.json == json,
-            orElse: () => $unknown,
           );
 
   static bool? toJsonValue(

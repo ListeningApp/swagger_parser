@@ -37,8 +37,7 @@ String dartEnumDtoTemplate(
       if (unknownEnumValue) _fromJson(className, enumClass),
       if (jsonParam) _jsonField(enumClass),
       if (enumsToJson) _toJson(enumClass, className),
-      if (enumClass.type == 'boolean')
-        _booleanJsonHelpers(className, unknownEnumValue),
+      if (enumClass.type == 'boolean') _booleanJsonHelpers(className),
       if (jsonParam) _toString(),
       if (unknownEnumValue) _valuesDefined(className),
     ];
@@ -208,11 +207,10 @@ String _toJson(UniversalEnumClass enumClass, String className) {
   }''';
 }
 
-String _booleanJsonHelpers(String className, bool unknownEnumValue) => '''
+String _booleanJsonHelpers(String className) => '''
 
   static $className fromJsonValue(bool json) => values.firstWhere(
         (e) => e.json == json,
-        ${unknownEnumValue ? 'orElse: () => \$unknown,' : ''}
       );
 
   static bool? toJsonValue($className? object) => object?.json;''';
