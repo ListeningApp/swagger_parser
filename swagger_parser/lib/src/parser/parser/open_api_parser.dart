@@ -1800,6 +1800,44 @@ class OpenApiParser {
           }
           // If there is more than one item, there is a union of types which dart might not natively support
           else if (otherItems.length > 1) {
+            // Common "single value or list of values" filter pattern, e.g.
+            //   anyOf:
+            //     - {type: string, enum: [...]}
+            //     - {type: array, items: {type: string, enum: [...]}}
+            // Dart has no native union type, but the array variant is a
+            // superset of the scalar one (a lone value is just a one-element
+            // list), which is exactly how the backend and dio encode repeated
+            // query params. Collapse to List<scalar> rather than falling
+            // through to the `object`/`dynamic` fallback below: a `dynamic`
+            // query parameter makes retrofit_generator emit `value.toJson()`,
+            // which throws at runtime because neither `null` nor a `List` has a
+            // `toJson()` method.
+            const scalarTypes = {'string', 'integer', 'number', 'boolean'};
+            final arrayItems = otherItems
+                .where((e) => e[_typeConst]?.toString() == _arrayConst)
+                .toList();
+            final scalarItems = otherItems
+                .where((e) => scalarTypes.contains(e[_typeConst]?.toString()))
+                .toList();
+            if (arrayItems.length == 1 &&
+                arrayItems.length + scalarItems.length == otherItems.length) {
+              final items = arrayItems.first[_itemsConst];
+              final itemMap = items is Map<String, dynamic> ? items : null;
+              final itemType = itemMap?[_typeConst]?.toString() ??
+                  (scalarItems.isNotEmpty
+                      ? scalarItems.first[_typeConst]?.toString()
+                      : null);
+              if (itemType != null && scalarTypes.contains(itemType)) {
+                ofType = UniversalType(
+                  type: itemType.toDartType(
+                    format: itemMap?[_formatConst]?.toString(),
+                  ),
+                  wrappingCollections: const [UniversalCollections.list],
+                  isRequired: isRequired,
+                );
+              }
+            }
+
             // It is possible that more cases have to be handled like
             // types:
             //   - null
@@ -1814,7 +1852,9 @@ class OpenApiParser {
             // At this point, we only explored a part of the schema so if the item is a ref, we won't be able to fully resolve the type
             // What we should do is create a new type that is a composition of all the object types in otherItems
             // Then we collect the refs and properties and store them in the UniversalComponentClass to be processed when we are done parsing the data classes.
-            if (map.containsKey(_allOfConst)) {
+            if (ofType != null) {
+              // Already resolved to a List<scalar> by the union collapse above.
+            } else if (map.containsKey(_allOfConst)) {
               final refs = <String>{};
               final parameters = <UniversalType>{};
               final imports = SplayTreeSet<String>();
