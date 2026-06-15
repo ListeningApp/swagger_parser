@@ -1834,9 +1834,10 @@ class OpenApiParser {
                     format: itemMap?[_formatConst]?.toString(),
                   ),
                   wrappingCollections: [
-                    isNullable
-                        ? UniversalCollections.nullableList
-                        : UniversalCollections.list,
+                    if (isNullable)
+                      UniversalCollections.nullableList
+                    else
+                      UniversalCollections.list,
                   ],
                   isRequired: isRequired,
                   nullable: isNullable,
