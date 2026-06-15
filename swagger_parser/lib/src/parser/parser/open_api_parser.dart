@@ -1828,12 +1828,18 @@ class OpenApiParser {
                       ? scalarItems.first[_typeConst]?.toString()
                       : null);
               if (itemType != null && scalarTypes.contains(itemType)) {
+                final isNullable = !isRequired;
                 ofType = UniversalType(
                   type: itemType.toDartType(
                     format: itemMap?[_formatConst]?.toString(),
                   ),
-                  wrappingCollections: const [UniversalCollections.list],
+                  wrappingCollections: [
+                    isNullable
+                        ? UniversalCollections.nullableList
+                        : UniversalCollections.list,
+                  ],
                   isRequired: isRequired,
+                  nullable: isNullable,
                 );
               }
             }
